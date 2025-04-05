@@ -15,5 +15,22 @@ spec:
         app: worker
     spec:
       containers:
-      - image: 861276124691.dkr.ecr.us-east-1.amazonaws.com/worker
+      - image: 861276124691.dkr.ecr.us-east-1.amazonaws.com/worker-image
         name: worker
+        env:
+            - name: REDIS_HOST
+              value: redis  # Connects to the Redis service
+            - name: POSTGRES_HOST
+              value: postgres  # Connects to the PostgreSQL service
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+          ports:
+            - containerPort: 8080
